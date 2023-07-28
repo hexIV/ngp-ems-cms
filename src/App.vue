@@ -1,6 +1,3 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <v-layout class="rounded rounded-md">
     <v-app-bar color="blue-darken-3">

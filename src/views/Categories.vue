@@ -18,6 +18,8 @@ export default defineComponent ({
       const finalRes = await res.json();
       if (finalRes.status == 200) {
         this.data = finalRes.data
+      } else {
+        // show alert an error happened
       }
     }
   },
