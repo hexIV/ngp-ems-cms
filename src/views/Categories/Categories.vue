@@ -1,14 +1,14 @@
 <script lang="ts">
 import Table from '@/components/Table.vue'
-import { defineComponent } from 'vue'
 
-export default defineComponent ({
+export default {
   data() {
     return {
       columns: [
         'ID', 'Title'
       ],
-      data: []
+      data: [],
+      crudLink: 'categories/edit'
     }
   },
   methods: {
@@ -26,9 +26,10 @@ export default defineComponent ({
   mounted() {
     this.fetchData();
   }
-})
+}
 </script>
 
 <template>
-  <Table :columns="columns" :data="data"></Table>
+  <v-btn color="success" :to="'/' + crudLink">Add New</v-btn>
+  <Table :columns="columns" :data="data" :crudLink="crudLink"></Table>
 </template>

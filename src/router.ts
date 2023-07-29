@@ -1,7 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router"
-import Events from "@/views/Events.vue"
-import Categories from "@/views/Categories.vue"
-import Cities from "@/views/Cities.vue"
+import Events from "@/views/Events/Events.vue"
+import Event from "@/views/Events/Event.vue"
+import Categories from "@/views/Categories/Categories.vue"
+import Category from "@/views/Categories/Category.vue"
+import Cities from "@/views/Cities/Cities.vue"
+import City from "@/views/Cities/City.vue"
 
 const routes = [
   {
@@ -12,7 +15,17 @@ const routes = [
   {
     path: '/categories',
     name: "Categories",
-    component: Categories
+    component: Categories,
+  },
+  {
+    path: '/categories/edit',
+    name: "CreateCategory",
+    component: Category
+  },
+  {
+    path: '/categories/edit/:slug',
+    name: "EditCategory",
+    component: Category
   },
   {
     path: '/cities',

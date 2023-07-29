@@ -2,6 +2,7 @@
   defineProps<{
     columns: Array<any>
     data: Array<any>
+    crudLink: string
   }>()
 
   //TODO: show loading animation when data is empty
@@ -22,7 +23,7 @@
       <tr v-for="item in data" :key="item.id">
         <td>#{{ item.id }}</td>
         <td>{{ item.title }}</td>
-        <td><v-btn color="success">Edit</v-btn></td>
+        <td><v-btn color="success" :to="'/' + crudLink + '/' + item.id">Edit</v-btn></td>
         <td><v-btn color="warning">Delete</v-btn></td>
       </tr>
     </tbody>
