@@ -1,7 +1,9 @@
 <script lang="ts">
 import Table from '@/components/Table.vue'
+import router from '@/router';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   data() {
     return {
       columns: [
@@ -21,15 +23,25 @@ export default {
       } else {
         // show alert an error happened
       }
+    },
+    async deleteCategory(id: number) {
+      await fetch(`${import.meta.env.VITE_API_URL}/categories?id=${id}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        router.push({ path: '/categories' })
+      });
     }
   },
   mounted() {
     this.fetchData();
   }
-}
+})
 </script>
 
 <template>
   <v-btn color="success" :to="'/' + crudLink">Add New</v-btn>
-  <Table :columns="columns" :data="data" :crudLink="crudLink"></Table>
+  <Table v-on:deleteAction="deleteCategory" :columns="columns" :data="data" :crudLink="crudLink"></Table>
 </template>

@@ -1,96 +1,107 @@
 <script lang="ts">
-  export default {
-    data() {
-      return {
-        formValid: false,
-        alert: false,
-        id: null,
-        parentId: null,
-        title: '',
-        categories: [],
-        nameRules: [
-          value => {
-            if (value) return true
+import router from '@/router'
 
-            return 'Title is required.'
-          },
-        ]
-      }
-    },
-    methods: {
-      async getCategory() {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/categories?id=${this.$route.params.slug}`);
-        const finalRes = await res.json();
-        if (finalRes.status == 200) {
-          this.title = finalRes.data.title
-          this.id = finalRes.data.id
-        } else {
-          this.alert = true;
-        }
-      },
-      async save() {
-        if (!this.formValid) {
-          return;
-        }
+export default {
+  data() {
+    return {
+      formValid: false,
+      alert: false,
+      id: null as number | null,
+      parentId: null,
+      title: '',
+      categories: [] as { props: { title?: string, value: number, level?: number } }[],
+      titleRules: [
+        (value: string) => {
+          if (value) return true
 
-        let url = `${import.meta.env.VITE_API_URL}/categories` + (this.id ? `?id=${this.id}` : '');
-        const res = await fetch(`${url}`, {
-          method: this.id == null ? "POST" : "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: this.id,
-            title: this.title,
-            parentId: this.parentId
-          })
-        });
-      },
-      async getCategoriesTree() {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/categories-tree`);
-        const finalRes = await res.json();
-        if (finalRes.status == 200) {
-          console.log(finalRes.data);
-          // loop result to create categories array
-          for (let i = 0; i < finalRes.data.length; i++) {
-            if (finalRes.data[i].children.length) {
-              this.getChildrenCategories(finalRes.data[i], 1);
-            } else {
-              this.categories.push({ props: { title: finalRes.data[i].title, level: 1 }})
-            }
-            this.categories.push({ props: { divider: true } })
-          }
-        }
-        console.log(this.categories)
-      },
-      getChildrenCategories(category: {
-        title: string,
-        children: Array<any>,
-        parent_id: number | null
-      }, level: number) {
-        this.categories.push({
-          props: {
-            header: category.title,
-            level: level
-          }
-        })
-        for (let j = 0; j < category.children.length; j++) {
-          if (category.children[j].children.length) {
-            this.getChildrenCategories(category.children[j], level + 1);
-          } else {
-            this.categories.push({ props: { title: category.children[j].title, level: level + 1 } })
-          }
-        }
-      }
-    },
-    mounted() {
-      if (this.$route.params.slug) {
-        this.getCategory();
-      }
+          return 'Title is required.'
+        },
+      ],
+      parentRules: [
+        (value: number) => {
+          if (value != this.id) return true
 
-      this.getCategoriesTree();
+          return 'Parent Category cannot be to itself'
+        },
+      ]
     }
+  },
+  methods: {
+    async getCategory() {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/categories?id=${this.$route.params.slug}`);
+      const finalRes = await res.json();
+      if (finalRes.status == 200) {
+        this.title = finalRes.data.title
+        this.id = finalRes.data.id
+        this.parentId = finalRes.data.parent_id
+      } else {
+        this.alert = true;
+      }
+    },
+    async save() {
+      if (!this.formValid) {
+        return;
+      }
+
+      let url = `${import.meta.env.VITE_API_URL}/categories` + (this.id ? `?id=${this.id}` : '');
+      await fetch(`${url}`, {
+        method: this.id == null ? "POST" : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: this.id,
+          title: this.title,
+          parent_id: this.parentId
+        })
+      }).then((response) => {
+        router.push({ path: '/categories' })
+      });
+    },
+    async getCategoriesTree() {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/categories-tree`);
+      const finalRes = await res.json();
+      if (finalRes.status == 200) {
+        // loop result to create categories array
+        for (let i = 0; i < finalRes.data.length; i++) {
+          if (finalRes.data[i].children.length) {
+            this.getChildrenCategories(finalRes.data[i], 1);
+          } else {
+            this.categories.push({ props: { value: finalRes.data[i].id, title: finalRes.data[i].title, level: 1 }})
+          }
+        }
+      }
+    },
+    getChildrenCategories(category: {
+      id: number,
+      title: string,
+      children: Array<any>,
+      parent_id: number | null
+    }, level: number) {
+      this.categories.push({
+        props: {
+          value: category.id,
+          title: category.title,
+          level: level
+        }
+      })
+      for (let j = 0; j < category.children.length; j++) {
+        if (category.children[j].children.length) {
+          this.getChildrenCategories(category.children[j], level + 1);
+        } else {
+          this.categories.push({ props: { value: category.children[j].id, title: category.children[j].title, level: level + 1 } })
+        }
+      }
+    }
+  },
+  mounted() {
+    if (this.$route.params.slug) {
+      this.getCategory();
+    }
+
+    this.getCategoriesTree();
   }
+}
 </script>
 
 <template>
@@ -98,18 +109,14 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="12">
-          <v-text-field v-model="title" :rules="nameRules" label="Title" required></v-text-field>
+          <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="12">
-          <v-select label="Parent Category" :items="categories">
+          <v-select label="Parent Category" :rules="parentRules" v-model="parentId" :items="categories">
             <template #item="{ props, item }">
-              <v-list-item v-bind="props" v-if="props.header" :class="'pl-' + (props.level * 3)">
-                {{ props.header }}
-              </v-list-item>
-              <v-divider v-else-if="props.divider" />
-              <v-list-item v-else v-bind="props" :class="'pl-' + (props.level * 3)"></v-list-item>
+              <v-list-item v-bind="props" :class="'pl-' + (props.level * 3)"></v-list-item>
             </template>
           </v-select>
         </v-col>
