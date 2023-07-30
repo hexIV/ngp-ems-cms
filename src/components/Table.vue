@@ -30,7 +30,7 @@ export default defineComponent ({
       <tr v-for="item in data" :key="item.id">
         <td>#{{ item.id }}</td>
         <td>{{ item.title }}</td>
-        <td><v-btn color="success" :to="'/' + crudLink + '/' + item.id">Edit</v-btn></td>
+        <td><v-btn color="info" :to="'/' + crudLink + '/' + item.id">Edit</v-btn></td>
         <td><v-btn color="warning" @click="deleteAction(item.id)">Delete</v-btn></td>
       </tr>
     </tbody>

@@ -15,7 +15,6 @@ export default defineComponent({
   },
   methods: {
     async fetchData() {
-      console.log(`${import.meta.env.VITE_API_URL}/categories`)
       const res = await fetch(`${import.meta.env.VITE_API_URL}/categories`);
       const finalRes = await res.json();
       if (finalRes.status == 200) {
@@ -31,7 +30,9 @@ export default defineComponent({
           "Content-Type": "application/json",
         },
       }).then((response) => {
-        router.push({ path: '/categories' })
+        if (response.status == 200) {
+          this.$forceUpdate();
+        }        
       });
     }
   },
@@ -42,6 +43,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-btn color="success" :to="'/' + crudLink">Add New</v-btn>
+  <div class="d-flex justify-space-between align-center pa-5">
+    <h1>Categories</h1>
+    <v-btn color="success" :to="'/' + crudLink">Add New</v-btn>
+  </div>
   <Table v-on:deleteAction="deleteCategory" :columns="columns" :data="data" :crudLink="crudLink"></Table>
 </template>

@@ -11,7 +11,7 @@
         <v-list-item :to="{path: '/cities'}" prepend-icon="mdi-city" title="Cities" value="cities"></v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="d-flex justify-center align-center">
+    <v-main class="d-flex flex-column justify-center">
       <router-view />
     </v-main>
   </v-layout>

@@ -31,7 +31,17 @@ const routes = [
     path: '/cities',
     name: "Cities",
     component: Cities
-  }
+  },
+  {
+    path: '/cities/edit',
+    name: "CreateCity",
+    component: City
+  },
+  {
+    path: '/cities/edit/:slug',
+    name: "EditCity",
+    component: City
+  },
 ]
 
 const router = createRouter({
