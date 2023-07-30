@@ -1,6 +1,5 @@
 <script lang="ts">
 import Table from '@/components/Table.vue'
-import router from '@/router';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -31,7 +30,7 @@ export default defineComponent({
         },
       }).then((response) => {
         if (response.status == 200) {
-          this.$forceUpdate();
+          this.fetchData()
         }        
       });
     }
