@@ -8,25 +8,6 @@
         parentId: null,
         title: '',
         categories: [],
-        /*
-        [
-          { props: { header: 'Fruits' } },
-          {
-            title: 'Pineapple',
-          },
-          {
-            title: 'Apple',
-          },
-          { props: { divider: true } },
-          { props: { header: 'Vegetables' } },
-          {
-            title: 'Lettuce',
-          },
-          {
-            title: 'Broccoli',
-          },
-        ]
-        */
         nameRules: [
           value => {
             if (value) return true
