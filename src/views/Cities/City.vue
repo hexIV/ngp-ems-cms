@@ -1,6 +1,9 @@
 <script lang="ts">
 import router from '@/router'
 
+let controller = new AbortController();
+let signal = controller.signal;
+
 export default {
   data() {
     return {
@@ -8,6 +11,7 @@ export default {
       alert: false,
       id: null as number | null,
       title: '',
+      citiesFromSearch: [] as { title: string }[],
       titleRules: [
         (value: string) => {
           if (value) return true
@@ -19,16 +23,22 @@ export default {
   },
   methods: {
     async searchCities(event: any) {
-      console.log(event.target)
-      return;
-      const res = await fetch(`${import.meta.env.VITE_CITIES_API_URL}/search?q=`);
-      const finalRes = await res.json();
-      if (finalRes.status == 200) {
-        this.title = finalRes.data.title
-        this.id = finalRes.data.id
-      } else {
-        this.alert = true;
-      }
+      controller.abort();
+      controller = new AbortController();
+      signal = controller.signal;
+
+      this.citiesFromSearch = []
+      try {
+        const res = await fetch(`${import.meta.env.VITE_CITIES_API_URL}/search?city=${event.target.value}`, { signal });
+        const finalRes = await res.json();
+        for (let i = 0; i <= finalRes.length; i++) {
+          if (finalRes[i]) {
+            this.citiesFromSearch.push({
+              title: finalRes[i].display_name
+            })
+          }
+        }
+      } catch (error) {}
     },
     async getCity() {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/cities?id=${this.$route.params.slug}`);
@@ -73,11 +83,13 @@ export default {
     <v-container>
       <v-row>
         <v-col cols="12" md="12">
-          <v-text-field v-model="title" :rules="titleRules" @keyup="searchCities" label="Title" required></v-text-field>
+          <v-autocomplete v-model="title" :items="citiesFromSearch" :rules="titleRules" @keyup="searchCities" label="Title" required></v-autocomplete>
         </v-col>
       </v-row>
       <v-row>
-        <v-btn color="success" @click="save">Save</v-btn>
+        <v-col cols="12" md="12">
+          <v-btn color="success" @click="save">Save</v-btn>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>
