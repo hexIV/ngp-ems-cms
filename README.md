@@ -1,46 +1,27 @@
 # ngp-ems-cms
 
-This template should help get you started developing with Vue 3 in Vite.
+For Docker image, I have used the `tomsik68/xampp:latest` image. This comes with apache2, mysql and phpMyAdmin in built.
+After all the changes I did to the image, I created an image myself that includes the DB structure and some sample data which can be accessed by pulling the following image:
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+docker pull hex4mt/ngp-ems
 ```
 
-### Compile and Hot-Reload for Development
+In order to run the Image, you will need to map a port for :80 (I used 8080) and you also need to mount the code.
+
+Create a folder wherever you want on your machine (no restrictions on naming).
+Clone each repository `ngp-ems-cms` and `ngp-ems-api` in the parent folder you created.
+When running the Docker Image, under Volumes, select the parent folder as Host path while Container path put in `/www/`
+
+Once you run the Docker image, you will be able to access the API and CMS on the following urls:
+
+`https://localhost:<PORT>/www/ngp-ems-cms`
+`https://localhost:<PORT>/www/ngp-ems-api`
+
+The CMS project needs the following command to be running:
+
+### Run Project
 
 ```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```

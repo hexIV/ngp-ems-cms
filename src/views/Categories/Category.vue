@@ -17,13 +17,6 @@ export default {
           return 'Title is required.'
         },
       ],
-      parentRules: [
-        (value: number) => {
-          if (value != this.id) return true
-
-          return 'Parent Category cannot be to itself'
-        },
-      ]
     }
   },
   methods: {
@@ -92,6 +85,11 @@ export default {
           this.categories.push({ props: { value: category.children[j].id, title: category.children[j].title, level: level + 1 } })
         }
       }
+    },
+    parentRules(value: number) {
+      if (value != this.id) return true
+
+      return 'Parent Category cannot be to itself'
     }
   },
   mounted() {
@@ -114,9 +112,9 @@ export default {
       </v-row>
       <v-row>
         <v-col cols="12" md="12">
-          <v-select label="Parent Category" :rules="parentRules" v-model="parentId" :items="categories">
+          <v-select label="Parent Category" :rules="[ parentRules ]" v-model="parentId" :items="categories">
             <template #item="{ props, item }">
-              <v-list-item v-bind="props" :class="'pl-' + (props.level * 3)"></v-list-item>
+              <v-list-item v-bind="props" :class="'pl-' + ((props.level as number) * 3)"></v-list-item>
             </template>
           </v-select>
         </v-col>
