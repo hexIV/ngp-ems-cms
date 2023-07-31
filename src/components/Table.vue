@@ -33,7 +33,7 @@ export default defineComponent ({
         <td>#{{ item.id }}</td>
         <td>{{ item.title }}</td>
         <td><v-btn color="info" :to="'/' + crudLink + '/' + item.id">Edit</v-btn></td>
-        <td><v-btn color="warning" @click="deleteAction(item.id)">Delete</v-btn></td>
+        <td><v-btn color="red-darken-3" @click="deleteAction(item.id)">Delete</v-btn></td>
       </tr>
     </tbody>
   </v-table>
