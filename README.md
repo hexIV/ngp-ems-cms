@@ -15,7 +15,6 @@ When running the Docker Image, under Volumes, select the parent folder as Host p
 
 Once you run the Docker image, you will be able to access the API and CMS on the following urls:
 
-`https://localhost:<PORT>/www/ngp-ems-cms`
 `https://localhost:<PORT>/www/ngp-ems-api`
 
 The CMS project needs the following command to be running:
@@ -25,3 +24,5 @@ The CMS project needs the following command to be running:
 ```sh
 npm run dev
 ```
+
+A URL is given in the CLI which you can click to access the CMS.
