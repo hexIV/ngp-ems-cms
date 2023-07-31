@@ -9,7 +9,9 @@ export default defineComponent ({
   },
   methods: {
     deleteAction(id: number) {
-      this.$emit('deleteAction', id)
+      if (confirm('Are you sure you want to delete this record?')) {
+        this.$emit('deleteAction', id)
+      }
     }
   }
 })

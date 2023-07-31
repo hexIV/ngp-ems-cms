@@ -6,7 +6,7 @@ export default defineComponent({
   data() {
     return {
       columns: [
-        'ID', 'Title', 'City', 'Categories'
+        'ID', 'Title'
       ],
       data: [],
       crudLink: 'events/edit'
