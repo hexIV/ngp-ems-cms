@@ -13,6 +13,16 @@ const routes = [
     component: Events
   },
   {
+    path: '/events/edit',
+    name: "CreateEvent",
+    component: Event
+  },
+  {
+    path: '/events/edit/:slug',
+    name: "EditEvent",
+    component: Event
+  },
+  {
     path: '/categories',
     name: "Categories",
     component: Categories,
